@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アンケート一覧 - アンケートアプリ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .survey-list {
+            list-style: none;
+            padding: 0;
+        }
+        .survey-item {
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        .survey-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .survey-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .survey-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .no-surveys {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>アンケート一覧</h1>
+        
+        <ul class="survey-list">
+            <li class="survey-item">
+                <div class="survey-title">顧客満足度調査</div>
+                <div class="survey-description">当社のサービスに関する満足度をお聞かせください。</div>
+                <span class="survey-status status-active">実施中</span>
+                <br>
+                <a href="answer.html?survey=1" class="btn btn-primary">回答する</a>
+            </li>
+            
+            <li class="survey-item">
+                <div class="survey-title">製品改善アンケート</div>
+                <div class="survey-description">製品の改善に向けたご意見をお聞かせください。</div>
+                <span class="survey-status status-active">実施中</span>
+                <br>
+                <a href="answer.html?survey=2" class="btn btn-primary">回答する</a>
+            </li>
+            
+            <li class="survey-item">
+                <div class="survey-title">イベント参加アンケート</div>
+                <div class="survey-description">先日のイベントに関するフィードバックをお願いします。</div>
+                <span class="survey-status status-inactive">終了</span>
+                <br>
+                <button class="btn btn-secondary" disabled>回答終了</button>
+            </li>
+        </ul>
+        
+        <div class="back-link">
+            <a href="index.html" class="btn btn-secondary">ホームに戻る</a>
+        </div>
+    </div>
+</body>
+</html>

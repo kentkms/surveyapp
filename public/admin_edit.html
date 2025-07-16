@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アンケート編集 - 管理者</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .question-editor {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .question-type {
+            min-width: 150px;
+        }
+        .options-container {
+            margin-top: 15px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .option-item input {
+            flex: 1;
+        }
+        .option-item button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+        .btn-outline:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        .survey-settings {
+            background-color: #e9f7ef;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .survey-settings h3 {
+            color: #155724;
+            margin-bottom: 15px;
+        }
+        .questions-section {
+            margin-bottom: 30px;
+        }
+        .questions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .add-question-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .preview-mode {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .preview-mode h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        .required-indicator {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .drag-handle {
+            cursor: move;
+            color: #6c757d;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .drag-handle:hover {
+            color: #007bff;
+        }
+        .question-tools {
+            display: flex;
+            gap: 5px;
+        }
+        .char-counter {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 5px;
+        }
+        .validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>アンケート作成・編集</h1>
+        
+        <form id="surveyForm">
+            <div class="survey-settings">
+                <h3>基本設定</h3>
+                <div class="form-group">
+                    <label for="surveyTitle">アンケートタイトル <span class="required-indicator">*</span></label>
+                    <input type="text" id="surveyTitle" name="title" required placeholder="例：顧客満足度調査">
+                    <div class="help-text">回答者に表示されるアンケートのタイトルです。</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="surveyDescription">説明文</label>
+                    <textarea id="surveyDescription" name="description" placeholder="アンケートの目的や回答時間などを記載してください。"></textarea>
+                    <div class="char-counter">0/500文字</div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">開始日時</label>
+                        <input type="datetime-local" id="startDate" name="start_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">終了日時</label>
+                        <input type="datetime-local" id="endDate" name="end_date">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="surveyStatus">ステータス</label>
+                        <select id="surveyStatus" name="status">
+                            <option value="draft">下書き</option>
+                            <option value="active">実施中</option>
+                            <option value="inactive">終了</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="anonymous">匿名回答</label>
+                        <select id="anonymous" name="anonymous">
+                            <option value="true">匿名</option>
+                            <option value="false">記名</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="questions-section">
+                <div class="questions-header">
+                    <h3>質問設定</h3>
+                    <button type="button" class="btn btn-success add-question-btn" onclick="addQuestion()">
+                        <span>➕</span> 質問を追加
+                    </button>
+                </div>
+                
+                <div id="questionsContainer">
+                    <!-- 質問1 -->
+                    <div class="question-editor" data-question-id="1">
+                        <div class="question-header">
+                            <div class="question-number">
+                                <span class="drag-handle">⋮⋮</span>
+                                質問 1
+                            </div>
+                            <div class="question-tools">
+                                <select class="question-type" onchange="changeQuestionType(1, this.value)">
+                                    <option value="radio">単一選択</option>
+                                    <option value="checkbox">複数選択</option>
+                                    <option value="text">テキスト</option>
+                                    <option value="textarea">長文テキスト</option>
+                                    <option value="number">数値</option>
+                                    <option value="date">日付</option>
+                                </select>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(1)">削除</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>質問文 <span class="required-indicator">*</span></label>
+                            <textarea name="question_text_1" placeholder="質問文を入力してください" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="required_1" checked> 必須回答
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="randomize_1"> 選択肢をランダム表示
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="options-container" id="options_1">
+                            <label>選択肢</label>
+                            <div class="option-item">
+                                <input type="text" name="option_1_1" placeholder="選択肢 1">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(1, 1)">削除</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" name="option_1_2" placeholder="選択肢 2">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(1, 2)">削除</button>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="addOption(1)">選択肢を追加</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 質問2 -->
+                    <div class="question-editor" data-question-id="2">
+                        <div class="question-header">
+                            <div class="question-number">
+                                <span class="drag-handle">⋮⋮</span>
+                                質問 2
+                            </div>
+                            <div class="question-tools">
+                                <select class="question-type" onchange="changeQuestionType(2, this.value)">
+                                    <option value="radio">単一選択</option>
+                                    <option value="checkbox" selected>複数選択</option>
+                                    <option value="text">テキスト</option>
+                                    <option value="textarea">長文テキスト</option>
+                                    <option value="number">数値</option>
+                                    <option value="date">日付</option>
+                                </select>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(2)">削除</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>質問文 <span class="required-indicator">*</span></label>
+                            <textarea name="question_text_2" placeholder="質問文を入力してください" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="required_2"> 必須回答
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="randomize_2"> 選択肢をランダム表示
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="options-container" id="options_2">
+                            <label>選択肢</label>
+                            <div class="option-item">
+                                <input type="text" name="option_2_1" placeholder="選択肢 1">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(2, 1)">削除</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" name="option_2_2" placeholder="選択肢 2">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(2, 2)">削除</button>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="addOption(2)">選択肢を追加</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 質問3 -->
+                    <div class="question-editor" data-question-id="3">
+                        <div class="question-header">
+                            <div class="question-number">
+                                <span class="drag-handle">⋮⋮</span>
+                                質問 3
+                            </div>
+                            <div class="question-tools">
+                                <select class="question-type" onchange="changeQuestionType(3, this.value)">
+                                    <option value="radio">単一選択</option>
+                                    <option value="checkbox">複数選択</option>
+                                    <option value="text">テキスト</option>
+                                    <option value="textarea" selected>長文テキスト</option>
+                                    <option value="number">数値</option>
+                                    <option value="date">日付</option>
+                                </select>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(3)">削除</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>質問文 <span class="required-indicator">*</span></label>
+                            <textarea name="question_text_3" placeholder="質問文を入力してください" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="required_3"> 必須回答
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>最大文字数</label>
+                                <input type="number" name="max_length_3" placeholder="500" min="1" max="10000">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>プレースホルダー</label>
+                            <input type="text" name="placeholder_3" placeholder="回答者への入力ヒント">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="previewSurvey()">プレビュー</button>
+                <button type="button" class="btn btn-warning" onclick="saveDraft()">下書き保存</button>
+                <button type="submit" class="btn btn-success">保存して公開</button>
+                <a href="admin_manage.html" class="btn btn-secondary">キャンセル</a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        let questionCount = 3;
+        let optionCount = {1: 2, 2: 2, 3: 0};
+        
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questionsContainer');
+            const questionHtml = `
+                <div class="question-editor" data-question-id="${questionCount}">
+                    <div class="question-header">
+                        <div class="question-number">
+                            <span class="drag-handle">⋮⋮</span>
+                            質問 ${questionCount}
+                        </div>
+                        <div class="question-tools">
+                            <select class="question-type" onchange="changeQuestionType(${questionCount}, this.value)">
+                                <option value="radio">単一選択</option>
+                                <option value="checkbox">複数選択</option>
+                                <option value="text">テキスト</option>
+                                <option value="textarea">長文テキスト</option>
+                                <option value="number">数値</option>
+                                <option value="date">日付</option>
+                            </select>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(${questionCount})">削除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>質問文 <span class="required-indicator">*</span></label>
+                        <textarea name="question_text_${questionCount}" placeholder="質問文を入力してください" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="required_${questionCount}" checked> 必須回答
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="randomize_${questionCount}"> 選択肢をランダム表示
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="options-container" id="options_${questionCount}">
+                        <label>選択肢</label>
+                        <div class="option-item">
+                            <input type="text" name="option_${questionCount}_1" placeholder="選択肢 1">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(${questionCount}, 1)">削除</button>
+                        </div>
+                        <div class="option-item">
+                            <input type="text" name="option_${questionCount}_2" placeholder="選択肢 2">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(${questionCount}, 2)">削除</button>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="addOption(${questionCount})">選択肢を追加</button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', questionHtml);
+            optionCount[questionCount] = 2;
+        }
+        
+        function removeQuestion(questionId) {
+            if (confirm('この質問を削除してもよろしいですか？')) {
+                const questionElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                questionElement.remove();
+                delete optionCount[questionId];
+            }
+        }
+        
+        function addOption(questionId) {
+            optionCount[questionId]++;
+            const optionNum = optionCount[questionId];
+            const container = document.getElementById(`options_${questionId}`);
+            const addButton = container.querySelector('.btn-outline');
+            
+            const optionHtml = `
+                <div class="option-item">
+                    <input type="text" name="option_${questionId}_${optionNum}" placeholder="選択肢 ${optionNum}">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeOption(${questionId}, ${optionNum})">削除</button>
+                </div>
+            `;
+            
+            addButton.insertAdjacentHTML('beforebegin', optionHtml);
+        }
+        
+        function removeOption(questionId, optionId) {
+            const optionElement = document.querySelector(`input[name="option_${questionId}_${optionId}"]`).closest('.option-item');
+            optionElement.remove();
+        }
+        
+        function changeQuestionType(questionId, type) {
+            const optionsContainer = document.getElementById(`options_${questionId}`);
+            
+            if (type === 'text' || type === 'textarea' || type === 'number' || type === 'date') {
+                optionsContainer.style.display = 'none';
+            } else {
+                optionsContainer.style.display = 'block';
+            }
+        }
+        
+        function previewSurvey() {
+            alert('プレビュー機能は開発中です。');
+        }
+        
+        function saveDraft() {
+            alert('下書きを保存しました。');
+        }
+        
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('アンケートを保存して公開しました。');
+            window.location.href = 'admin_manage.html';
+        });
+        
+        // 文字数カウンター
+        document.getElementById('surveyDescription').addEventListener('input', function() {
+            const counter = this.nextElementSibling;
+            const count = this.value.length;
+            counter.textContent = `${count}/500文字`;
+            if (count > 500) {
+                counter.style.color = '#dc3545';
+            } else {
+                counter.style.color = '#6c757d';
+            }
+        });
+    </script>
+</body>
+</html>

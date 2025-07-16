@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アンケート回答 - アンケートアプリ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .survey-info {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .answer-options {
+            margin-left: 20px;
+        }
+        .answer-option {
+            margin-bottom: 10px;
+        }
+        .answer-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .answer-option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .text-answer {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .form-actions .btn {
+            margin: 0 10px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #007bff;
+            width: 33%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>アンケート回答</h1>
+        
+        <div class="survey-info">
+            <h2>顧客満足度調査</h2>
+            <p>当社のサービスに関する満足度をお聞かせください。回答時間の目安：約5分</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        
+        <form id="surveyForm">
+            <div class="question">
+                <div class="question-number">質問 1/3</div>
+                <div class="question-text">当社のサービス全体に対する満足度はいかがですか？</div>
+                <div class="answer-options">
+                    <div class="answer-option">
+                        <input type="radio" id="q1_1" name="q1" value="5">
+                        <label for="q1_1">非常に満足</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" id="q1_2" name="q1" value="4">
+                        <label for="q1_2">満足</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" id="q1_3" name="q1" value="3">
+                        <label for="q1_3">普通</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" id="q1_4" name="q1" value="2">
+                        <label for="q1_4">不満</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" id="q1_5" name="q1" value="1">
+                        <label for="q1_5">非常に不満</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">質問 2/3</div>
+                <div class="question-text">改善が必要だと思われる点はありますか？（複数選択可）</div>
+                <div class="answer-options">
+                    <div class="answer-option">
+                        <input type="checkbox" id="q2_1" name="q2" value="price">
+                        <label for="q2_1">価格</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="checkbox" id="q2_2" name="q2" value="quality">
+                        <label for="q2_2">品質</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="checkbox" id="q2_3" name="q2" value="support">
+                        <label for="q2_3">サポート</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="checkbox" id="q2_4" name="q2" value="delivery">
+                        <label for="q2_4">配送</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="checkbox" id="q2_5" name="q2" value="other">
+                        <label for="q2_5">その他</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">質問 3/3</div>
+                <div class="question-text">ご意見・ご要望がございましたら、お聞かせください。</div>
+                <div class="answer-options">
+                    <textarea class="text-answer" name="q3" placeholder="こちらにご意見をお書きください..."></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="surveys.html" class="btn btn-secondary">戻る</a>
+                <button type="submit" class="btn btn-primary">回答を送信</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'thanks.html';
+        });
+    </script>
+</body>
+</html>
